@@ -1,18 +1,18 @@
-import Image from "next/image";
-import React from "react";
+import Image from 'next/image';
+import React from 'react';
 
-const Featured = ({ featuredProducts }) => {
-  const receivedProducts = featuredProducts.data;
+const ProcessorPage = ({processors}) => {
 
-  return (
-    <>
-      <div className="container mx-auto ">
+    const receivedData =processors.data;
+    return (
+        <>
+      <div className="container mx-auto mt-24">
         {/* Header Start */}
         <div className="mb-8 mx-auto flex justify-center w-2/3">
-          <p className="text-4xl border-b-2 border-blue-600 text-blue-600 text-center py-6 font-bold ">Featured Products</p>
+          <p className="text-4xl border-b-2 border-blue-600 text-blue-600 text-center py-6 font-bold mb-10">Motherboards</p>
         </div>
        <div className="grid gap-4 grid-cols-2 mx-4 md:grid-cols-4 ">
-        {receivedProducts.map((product) => (
+        {receivedData.map((product) => (
             <div key={product._id} className="">
        
               <div className="mx-auto md:mx-0 relative md:min-h-[320px] lg:min-h-96  max-w-64  rounded overflow-hidden shadow-lg shadow-black-600 border px-2 py-2 hover:shadow-xl ">
@@ -46,7 +46,22 @@ const Featured = ({ featuredProducts }) => {
 
 
     </>
-  );
+    );
 };
 
-export default Featured;
+export default ProcessorPage;
+
+export const getStaticProps = async () => {
+    const res = await fetch(
+      "http://localhost:5000/api/v1/products/?category=processor"
+    );
+    const processors = await res.json();
+    // By returning { props: { posts } }, the Blog component
+    // will receive `posts` as a prop at build time
+    return {
+      props: {
+        processors,
+      },
+    };
+  };
+  

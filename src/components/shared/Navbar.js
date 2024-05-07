@@ -1,7 +1,9 @@
+import Link from "next/link";
+
 const Navbar = () => {
   return (
-    <div className="container mx-auto text-white ">
-      <div className="navbar bg-base-100">
+    <div className=" mx-auto text-black fixed top-0 z-20 bg-white w-full ">
+      <div className="navbar bg-base-100 container mx-auto">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -43,18 +45,18 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <a className="btn btn-ghost text-xl">PC Master</a>
+          <Link href={'/'}><button className="btn btn-ghost text-xl text-white bg-blue-600 hover:bg-blue-400">PC MASTER</button></Link>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            <li>
+          <ul className="menu menu-horizontal px-1 ">
+            <li className="hover:text-blue-600">
               <a>Item 1</a>
             </li>
             <li>
               <details>
-                <summary>Parent</summary>
-                <ul className="p-2">
-                  <li>
+                <summary className="hover:text-blue-600">Parent</summary>
+                <ul className="p-2 bg-white z-2 ">
+                  <li className="text-block">
                     <a>Submenu 1</a>
                   </li>
                   <li>
@@ -63,13 +65,13 @@ const Navbar = () => {
                 </ul>
               </details>
             </li>
-            <li>
+            <li className="hover:text-blue-600">
               <a>Item 3</a>
             </li>
           </ul>
         </div>
         <div className="navbar-end">
-          <button className="btn btn-accent">PC Builder</button>
+          <button className="btn btn-accent bg-blue-600 text-white hover:bg-blue-400">PC Builder</button>
         </div>
       </div>
     </div>

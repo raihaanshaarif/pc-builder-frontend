@@ -2,7 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: ["trusttechspace.blr1.cdn.digitaloceanspaces.com"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com', 
+      },
+      {
+        protocol: 'https',
+        hostname: 'trusttechspace.blr1.cdn.digitaloceanspaces.com'
+      }
+    ],
   },
 };
 

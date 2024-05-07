@@ -4,6 +4,7 @@ import Banner from "@/components/home/Banner";
 import store from "@/redux/store";
 import { useGetProductsQuery } from "@/redux/api/apiSlice";
 import Featured from "@/components/home/featured";
+import FeaturedCategory from "@/components/home/FeaturedCategory";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,6 +13,7 @@ export default function Home({ featuredProducts }) {
     <>
       <Banner />
       <Featured featuredProducts={featuredProducts} />
+      <FeaturedCategory/>
     </>
   );
 }

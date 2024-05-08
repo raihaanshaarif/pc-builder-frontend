@@ -1,22 +1,41 @@
+import { addToBuilder } from '@/redux/features/builder/builderSlice';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useDispatch, useSelector } from 'react-redux';
 
-const OthersPage = ({ others }) => {
-  const receivedData = others.data;
+const Selector = ({ products }) => {
+  const dispatch = useDispatch();
+
+  const receivedProducts = products.data;
+
+  const handleAddToBuilder = (productId) => {
+    return () => {
+      const matchedProduct = receivedProducts.find((p) => p._id === productId);
+      console.log(matchedProduct);
+      if (matchedProduct) {
+        dispatch(addToBuilder(matchedProduct));
+        // toast.success('Successfully Added to Builder!');
+      } else {
+        // toast.error('Failed to find the product.');
+      }
+    };
+  };
+
   return (
-    <>
-      <div className="container mx-auto mt-24">
+    <div className="mt-40">
+      <div className="container mx-auto ">
         {/* Header Start */}
         <div className="mx-auto mb-8 flex w-2/3 justify-center">
-          <p className="mb-10 border-b-2 border-blue-600 py-6 text-center text-4xl font-bold text-blue-600">
-            Others
+          <p className="border-b-2 border-blue-600 py-6 text-center text-4xl font-bold text-blue-600 ">
+            Please Select your Product
           </p>
         </div>
         <div className="mx-4 grid grid-cols-2 gap-4 md:grid-cols-4 ">
-          {receivedData.map((product) => (
+          {receivedProducts.map((product) => (
             <div key={product._id} className="">
-              <Link href={`/product/${product._id}`}>
+              <div>
                 <div className="shadow-black-600 relative mx-auto max-w-64 overflow-hidden  rounded  border px-2 py-2 shadow-lg hover:shadow-xl md:mx-0 md:min-h-[320px] lg:min-h-96 ">
                   <div className="overflow-hidden">
                     <Image
@@ -42,28 +61,41 @@ const OthersPage = ({ others }) => {
                       Rating: {product.averageRating}
                     </p>
                   </div>
+
+                  <button
+                    className="w-full bg-blue-600 text-center text-white"
+                    onClick={handleAddToBuilder(product._id)}
+                  >
+                    ADD TO BUILDER
+                  </button>
                 </div>
-              </Link>
+              </div>
             </div>
           ))}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default OthersPage;
+export default Selector;
 
-export const getStaticProps = async () => {
+export async function getServerSideProps(context) {
+  // Access query parameters from the context
+  const { query } = context;
+  const { category } = query;
+  //   console.log(query.category);
+
+  // Example: Fetching data based on the category parameter
   const res = await fetch(
-    'http://localhost:5000/api/v1/products/?category=others',
+    `http://localhost:5000/api/v1/products/?category=${category}`,
   );
-  const others = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
+  const products = await res.json();
+
+  // Return the products as props
   return {
     props: {
-      others,
+      products, // Pass the products fetched based on the category to the page component
     },
   };
-};
+}

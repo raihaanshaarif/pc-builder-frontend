@@ -1,9 +1,9 @@
-import Link from "next/link";
+import Link from 'next/link';
 
 const Navbar = () => {
   return (
-    <div className=" mx-auto text-black fixed top-0 z-20 bg-white w-full ">
-      <div className="navbar bg-base-100 container mx-auto">
+    <div className=" fixed top-0 z-20 mx-auto w-full border-b-2 bg-white text-black">
+      <div className="container navbar mx-auto bg-base-100">
         <div className="navbar-start">
           <div className="dropdown">
             <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -24,19 +24,34 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu dropdown-content menu-sm z-[1] mt-3 w-52 bg-base-100 p-2 shadow"
             >
               <li>
                 <a>Item 1</a>
               </li>
               <li>
-                <a>Parent</a>
-                <ul className="p-2">
+                <a>Category</a>
+                <ul className="p-2 uppercase ">
                   <li>
-                    <a>Submenu 1</a>
+                    <Link href={'/processor'}>Processor</Link>
                   </li>
                   <li>
-                    <a>Submenu 2</a>
+                    <Link href={'/motherboard'}>motherboard</Link>
+                  </li>
+                  <li>
+                    <Link href={'/ram'}>Ram</Link>
+                  </li>
+                  <li>
+                    <Link href={'/power-supply'}>Power Supply</Link>
+                  </li>
+                  <li>
+                    <Link href={'/hdd'}>Storage Device</Link>
+                  </li>
+                  <li>
+                    <Link href={'/monitor'}>Monitor</Link>
+                  </li>
+                  <li>
+                    <Link href={'/others'}>Others</Link>
                   </li>
                 </ul>
               </li>
@@ -45,33 +60,57 @@ const Navbar = () => {
               </li>
             </ul>
           </div>
-          <Link href={'/'}><button className="btn btn-ghost text-xl text-white bg-blue-600 hover:bg-blue-400">PC MASTER</button></Link>
+          <Link href={'/'}>
+            <button className="btn btn-ghost bg-blue-600 text-xl text-white hover:bg-blue-400">
+              PC MASTER
+            </button>
+          </Link>
         </div>
         <div className="navbar-center hidden lg:flex">
           <ul className="menu menu-horizontal px-1 ">
             <li className="hover:text-blue-600">
-              <a>Item 1</a>
+              <Link href={'/'}>HOME</Link>
             </li>
             <li>
               <details>
-                <summary className="hover:text-blue-600">Parent</summary>
-                <ul className="p-2 bg-white z-2 ">
+                <summary className="hover:text-blue-600">CATEGORY</summary>
+                <ul className="z-2 bg-white p-2 ">
                   <li className="text-block">
-                    <a>Submenu 1</a>
+                    <Link href={'/processor'}>Processor</Link>
                   </li>
                   <li>
-                    <a>Submenu 2</a>
+                    <Link href={'/motherboard'}>motherboard</Link>
+                  </li>
+                  <li>
+                    <Link href={'/ram'}>Ram</Link>
+                  </li>
+                  <li>
+                    <Link href={'/power-supply'}>Power Supply</Link>
+                  </li>
+                  <li>
+                    <Link href={'/hdd'}>Storage Device</Link>
+                  </li>
+                  <li>
+                    <Link href={'/monitor'}>Monitor</Link>
+                  </li>
+                  <li>
+                    <Link href={'/others'}>Others</Link>
                   </li>
                 </ul>
               </details>
             </li>
             <li className="hover:text-blue-600">
-              <a>Item 3</a>
+              <a>CONTACT</a>
             </li>
           </ul>
         </div>
         <div className="navbar-end">
-          <button className="btn btn-accent bg-blue-600 text-white hover:bg-blue-400">PC Builder</button>
+          <Link
+            href={'/builder'}
+            className="btn btn-accent bg-blue-600 text-white hover:bg-blue-400"
+          >
+            PC Builder
+          </Link>
         </div>
       </div>
     </div>

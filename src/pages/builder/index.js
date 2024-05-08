@@ -11,17 +11,52 @@ import {
   FaRegQuestionCircle,
 } from 'react-icons/fa';
 import Link from 'next/link';
-import { deleteFromBuilder } from '@/redux/features/builder/builderSlice';
+import { clearBuilder, deleteFromBuilder } from '@/redux/features/builder/builderSlice';
+import toast from 'react-hot-toast';
+import { getSession } from 'next-auth/react';
 
-const BuilderPage = () => {
+
+export async function getServerSideProps(context) {
+  const session = await getSession({ req: context.req });
+
+  if (!session) {
+    // If no user session exists, redirect to the sign-in page
+    return {
+      redirect: {
+        destination: '/signin',
+        permanent: false,
+      },
+    };
+  }
+
+  // If there is a session, return the page props
+  return {
+    props: { session },
+  };
+}
+
+
+
+
+
+
+const BuilderPage = ({ session }) => {
   const dispatch = useDispatch();
   const components = useSelector((state) => state.builder.components);
-  console.log('final', components);
+  // console.log('final', components);
+
+  const handleSubmit = () => {
+    // You might want to implement additional logic here for the build submission
+    toast.success('Build submitted successfully!');
+    console.log('Submitted', components);
+    dispatch(clearBuilder());
+  };
+
 
   const categories = [
     { name: 'Processor', icon: <BsMotherboard />, link: '/processor' },
     { name: 'Motherboard', icon: <FaMicrochip />, link: '/motherboard' },
-    { name: 'RAM', icon: <FaMemory />, link: '/ram' },
+    { name: 'Ram', icon: <FaMemory />, link: '/ram' },
     { name: 'Power Supply', icon: <FaPowerOff />, link: '/power-supply' },
     { name: 'Storage Device', icon: <FaHdd />, link: '/hdd' },
     { name: 'Monitor', icon: <FaTv />, link: '/monitor' },
@@ -32,6 +67,10 @@ const BuilderPage = () => {
     dispatch(deleteFromBuilder({ category }));
   };
 
+  const isEnabled = components.length > 5;
+
+
+
   return (
     <div className="container mx-auto mt-36">
       {categories.map((category) => {
@@ -40,9 +79,9 @@ const BuilderPage = () => {
         return (
           <div
             key={category.name}
-            className="grid grid-flow-col grid-cols-12 border py-5"
+            className="grid grid-flow-col grid-cols-12 border py-2"
           >
-            <div className="col-span-2 flex items-center justify-center text-6xl">
+            <div className="col-span-2 flex flex-col items-center justify-center text-6xl">
               {category.icon}
               <p className="text-center text-xl">{category.name}</p>
             </div>
@@ -77,7 +116,13 @@ const BuilderPage = () => {
       })}
 
       <div>
-        <button>Submit</button>
+      <button 
+        className={`px-8 py-2 rounded w-full text-white ${isEnabled ? 'bg-blue-600' : 'bg-gray-400 cursor-not-allowed'}`}
+        disabled={!isEnabled} // The button is disabled if the condition is not met
+        onClick={handleSubmit}
+      >
+        Complete Build
+      </button>
       </div>
     </div>
   );

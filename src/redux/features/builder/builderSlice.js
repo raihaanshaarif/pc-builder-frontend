@@ -26,9 +26,12 @@ export const builderSlice = createSlice({
       );
       toast.success('Component removed from builder.');
     },
+    clearBuilder: (state) => {
+      state.components = []; // Resets the components array
+    },
   },
 });
 
-export const { addToBuilder, deleteFromBuilder } = builderSlice.actions;
+export const { addToBuilder, deleteFromBuilder, clearBuilder } = builderSlice.actions;
 
 export default builderSlice.reducer;

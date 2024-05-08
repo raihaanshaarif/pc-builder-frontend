@@ -1,11 +1,13 @@
 import { addToBuilder } from '@/redux/features/builder/builderSlice';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Selector = ({ products }) => {
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const receivedProducts = products.data;
@@ -16,6 +18,9 @@ const Selector = ({ products }) => {
       console.log(matchedProduct);
       if (matchedProduct) {
         dispatch(addToBuilder(matchedProduct));
+        setTimeout(() => {
+          router.push('/builder'); // Change '/builder' to the URL you want to redirect to
+        }, 1000); // 1000 milliseconds delay
         // toast.success('Successfully Added to Builder!');
       } else {
         // toast.error('Failed to find the product.');

@@ -67,26 +67,6 @@ export default productDetail;
 
 export const getStaticPaths = async () => {
   try {
-    const apiUrl = process.env.API_URL || 'http://localhost:5000'; // Ensure fallback to localhost for development
-    const res = await fetch(`${apiUrl}/api/v1/products/?limit=40`);
-    if (!res.ok) {
-      throw new Error(`Failed to fetch product paths, status: ${res.status}`);
-    }
-    const { data } = await res.json();
-    const paths = data.map(product => ({
-      params: { productId: product._id },
-    }));
-
-    return { paths, fallback: false };
-  } catch (error) {
-    console.error('getStaticPaths error:', error);
-    return { paths: [], fallback: 'blocking' }; // Consider using 'blocking' if you expect new products often
-  }
-};
-
-
-export const getStaticPaths = async () => {
-  try {
     const apiUrl = process.env.API_URL || 'http://localhost:5000';
     const res = await fetch(`${apiUrl}/api/v1/products/?limit=40`);
     if (!res.ok) {
@@ -105,4 +85,21 @@ export const getStaticPaths = async () => {
   }
 };
 
+
+
+export const getStaticProps = async ({ params }) => {
+  const apiUrl = process.env.API_URL || 'http://localhost:5000'; // Same fallback mechanism
+  try {
+    const res = await fetch(`${apiUrl}/api/v1/products/${params.productId}`);
+    if (!res.ok) {
+      throw new Error(`Failed to fetch product ${params.productId}, status: ${res.status}`);
+    }
+    const product = await res.json();
+
+    return { props: { product } };
+  } catch (error) {
+    console.error('getStaticProps error:', error);
+    return { props: { product: null } }; // Consider how you handle null product cases in your component
+  }
+};
 

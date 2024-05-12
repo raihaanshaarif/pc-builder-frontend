@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 const MotherboardPage = ({ motherboards }) => {
-  const receivedData = motherboards.data;
+
 
   return (
     <>
@@ -16,7 +16,7 @@ const MotherboardPage = ({ motherboards }) => {
           </p>
         </div>
         <div className="mx-4 grid grid-cols-2 gap-4 md:grid-cols-4 ">
-          {receivedData.map((product) => (
+        {motherboards && motherboards.length > 0 ? motherboards.map((product) => (
             <div key={product._id} className="">
               <Link href={`/product/${product._id}`}>
                 <div className="shadow-black-600 relative mx-auto max-w-64 overflow-hidden  rounded  border px-2 py-2 shadow-lg hover:shadow-xl md:mx-0 md:min-h-[320px] lg:min-h-96 ">
@@ -47,7 +47,7 @@ const MotherboardPage = ({ motherboards }) => {
                 </div>
               </Link>
             </div>
-          ))}
+          )): <p>No products found.</p>}
         </div>
       </div>
     </>
@@ -56,16 +56,23 @@ const MotherboardPage = ({ motherboards }) => {
 
 export default MotherboardPage;
 
-export const getStaticProps = async () => {
-  const res = await fetch(
-    'http://localhost:5000/api/v1/products/?category=motherboard',
-  );
-  const motherboards = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      motherboards,
-    },
-  };
-};
+export async function getStaticProps() {
+  try {
+      const res = await fetch('http://localhost:5000/api/v1/products/?category=motherboard');
+      const data = await res.json();
+      
+      if (!res.ok) {
+          throw new Error(`Failed to fetch products, status: ${res.status}`);
+      }
+      // console.log(data.data);
+      return {
+          props: { motherboards: data.data }, // ensure you pass the correct part of the response
+      };
+  } catch (error) {
+      console.error("Error fetching product data:", error);
+      return {
+          props: { motherboards: [] }, // return empty array or appropriate fallback
+      };
+  }
+}
+

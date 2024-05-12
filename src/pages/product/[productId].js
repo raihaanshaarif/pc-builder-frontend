@@ -67,33 +67,42 @@ export default productDetail;
 
 export const getStaticPaths = async () => {
   try {
-    const res = await fetch(`${process.env.API_URL}/api/v1/products/?limit=40`);
+    const apiUrl = process.env.API_URL || 'http://localhost:5000'; // Ensure fallback to localhost for development
+    const res = await fetch(`${apiUrl}/api/v1/products/?limit=40`);
     if (!res.ok) {
-      throw new Error('Failed to fetch product paths.');
+      throw new Error(`Failed to fetch product paths, status: ${res.status}`);
     }
-    const featuredProducts = await res.json();
-    const paths = featuredProducts.data.map((product) => ({
+    const { data } = await res.json();
+    const paths = data.map(product => ({
       params: { productId: product._id },
     }));
 
     return { paths, fallback: false };
   } catch (error) {
     console.error('getStaticPaths error:', error);
-    return { paths: [], fallback: false };
+    return { paths: [], fallback: 'blocking' }; // Consider using 'blocking' if you expect new products often
   }
 };
 
-export const getStaticProps = async ({ params }) => {
+
+export const getStaticPaths = async () => {
   try {
-    const res = await fetch(`${process.env.API_URL}/api/v1/products/${params.productId}`);
+    const apiUrl = process.env.API_URL || 'http://localhost:5000';
+    const res = await fetch(`${apiUrl}/api/v1/products/?limit=40`);
     if (!res.ok) {
-      throw new Error(`Failed to fetch product ${params.productId}`);
+      console.error(`Failed to fetch product paths, status: ${res.status}, URL: ${apiUrl}`);
+      throw new Error(`Failed to fetch product paths, status: ${res.status}`);
     }
-    const product = await res.json();
+    const { data } = await res.json();
+    const paths = data.map(product => ({
+      params: { productId: product._id }
+    }));
 
-    return { props: { product } };
+    return { paths, fallback: 'blocking' };
   } catch (error) {
-    console.error('getStaticProps error:', error);
-    return { props: { product: null } };
+    console.error('getStaticPaths error:', error.message);
+    return { paths: [], fallback: 'blocking' };
   }
 };
+
+

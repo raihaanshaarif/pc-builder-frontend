@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const MonitorPage = ({ monitors }) => {
-  const receivedData = monitors.data;
+ 
   return (
     <>
       <div className="container mx-auto mt-24">
@@ -14,7 +14,7 @@ const MonitorPage = ({ monitors }) => {
           </p>
         </div>
         <div className="mx-4 grid grid-cols-2 gap-4 md:grid-cols-4 ">
-          {receivedData.map((product) => (
+        {monitors && monitors.length > 0 ? monitors.map((product) => (
             <div key={product._id} className="">
               <Link href={`/product/${product._id}`}>
                 <div className="shadow-black-600 relative mx-auto max-w-64 overflow-hidden  rounded  border px-2 py-2 shadow-lg hover:shadow-xl md:mx-0 md:min-h-[320px] lg:min-h-96 ">
@@ -45,7 +45,7 @@ const MonitorPage = ({ monitors }) => {
                 </div>
               </Link>
             </div>
-          ))}
+          )): <p>No products found.</p>}
         </div>
       </div>
     </>
@@ -54,16 +54,23 @@ const MonitorPage = ({ monitors }) => {
 
 export default MonitorPage;
 
-export const getStaticProps = async () => {
-  const res = await fetch(
-    'http://localhost:5000/api/v1/products/?category=monitor',
-  );
-  const monitors = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      monitors,
-    },
-  };
-};
+export async function getStaticProps() {
+  try {
+      const res = await fetch('http://localhost:5000/api/v1/products/?category=monitor');
+      const data = await res.json();
+      
+      if (!res.ok) {
+          throw new Error(`Failed to fetch products, status: ${res.status}`);
+      }
+      // console.log(data.data);
+      return {
+          props: { monitors: data.data }, // ensure you pass the correct part of the response
+      };
+  } catch (error) {
+      console.error("Error fetching product data:", error);
+      return {
+          props: { monitors: [] }, // return empty array or appropriate fallback
+      };
+  }
+}
+

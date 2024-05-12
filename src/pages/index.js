@@ -20,15 +20,23 @@ export default function Home({ featuredProducts }) {
 // This function gets called at build time
 
 export const getStaticProps = async () => {
-  const res = await fetch(
-    'http://localhost:5000/api/v1/products/?featured=true',
-  );
-  const featuredProducts = await res.json();
-  // By returning { props: { posts } }, the Blog component
-  // will receive `posts` as a prop at build time
-  return {
-    props: {
-      featuredProducts,
-    },
-  };
+
+  try {
+    const res = await fetch('http://localhost:5000/api/v1/products/?featured=true');
+    const data = await res.json();
+    
+    if (!res.ok) {
+        throw new Error(`Failed to fetch products, status: ${res.status}`);
+    }
+    // console.log(data.data);
+    return {
+        props: { featuredProducts: data }, // ensure you pass the correct part of the response
+    };
+} catch (error) {
+    console.error("Error fetching product data:", error);
+    return {
+        props: { featuredProducts: [] }, // return empty array or appropriate fallback
+    };
+}
+
 };

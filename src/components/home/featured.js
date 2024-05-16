@@ -3,7 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const Featured = ({ featuredProducts }) => {
-  const receivedProducts = featuredProducts.data;
+  
 
   return (
     <>
@@ -15,20 +15,19 @@ const Featured = ({ featuredProducts }) => {
           </p>
         </div>
         <div className="mx-4 grid grid-cols-2 gap-4 md:grid-cols-4 ">
-          {receivedProducts.map((product) => (
+          {featuredProducts.map((product) => (
             <div key={product._id} className="">
               <Link href={`/product/${product._id}`}>
                 <div className="shadow-black-600 relative mx-auto max-w-64 overflow-hidden  rounded  border px-2 py-2 shadow-lg hover:shadow-xl md:mx-0 md:min-h-[320px] lg:min-h-96 ">
-                  <div className="overflow-hidden">
-                    <Image
-                      className="overflow-hidden transition duration-300 hover:scale-125"
-                      src={product.image}
-                      alt={product.name}
-                      width={500} // You need to specify width and height
-                      height={300}
-                      layout="responsive" // This makes the image scale with the width of its container
-                    />
-                  </div>
+                <div className="w-full h-auto "> 
+                  <Image
+                    className="overflow-hidden transition duration-300 hover:scale-125"
+                    src={product.image}
+                    alt={product.name}
+                    width={500}
+                    height={300}
+                  />
+                </div>
                   {/* <p className="absolute top-0 right-0 bg-orange-300 rounded px-5 py-1 ">processor</p> */}
                   <div>
                     <p className="text-center text-xl">{product.category}</p>

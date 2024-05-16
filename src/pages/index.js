@@ -9,6 +9,7 @@ import FeaturedCategory from '@/components/home/FeaturedCategory';
 const inter = Inter({ subsets: ['latin'] });
 
 export default function Home({ featuredProducts }) {
+  // console.log(featuredProducts);
   return (
     <>
       <Banner />
@@ -19,24 +20,32 @@ export default function Home({ featuredProducts }) {
 }
 // This function gets called at build time
 
-export const getStaticProps = async () => {
 
+export const getStaticProps = async() =>{
+  const apiUrl = process.env.API_URL;
   try {
-    const res = await fetch('http://localhost:5000/api/v1/products/?featured=true');
-    const data = await res.json();
-    
+    const res = await fetch(`${apiUrl}/api/v1/products/${params.productId}`);
     if (!res.ok) {
-        throw new Error(`Failed to fetch products, status: ${res.status}`);
+      throw new Error(`Failed to fetch products, status: ${res.status}`);
     }
+ 
+    const data = await res.json();  // Assuming data is structured as shown
     // console.log(data.data);
+
+    // Ensure that the structure of 'data.data' is what you expect
     return {
-        props: { featuredProducts: data }, // ensure you pass the correct part of the response
+      props: {
+        featuredProducts: data.data || []  // Pass 'data.data' which contains the products array
+      },
+      revalidate: 10,
     };
-} catch (error) {
+  } catch (error) {
     console.error("Error fetching product data:", error);
     return {
-        props: { featuredProducts: [] }, // return empty array or appropriate fallback
+      props: {
+        featuredProducts: []  // Fallback to an empty array if there's an error
+      }
     };
+  }
 }
 
-};

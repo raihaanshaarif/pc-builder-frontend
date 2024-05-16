@@ -3,6 +3,7 @@ import Link from 'next/link';
 import React from 'react';
 
 const StorageDevicePage = ({ storageDevices }) => {
+  console.log(storageDevices);
 
   return (
     <>
@@ -54,7 +55,7 @@ const StorageDevicePage = ({ storageDevices }) => {
 
 export default StorageDevicePage;
 
-export async function getStaticProps() {
+export const getStaticProps = async()=> {
   try {
       const res = await fetch('http://localhost:5000/api/v1/products/?category=storage%20device');
       const data = await res.json();

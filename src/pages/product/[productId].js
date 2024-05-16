@@ -73,12 +73,16 @@ export const getStaticPaths = async () => {
       console.error(`Failed to fetch product paths, status: ${res.status}, URL: ${apiUrl}`);
       throw new Error(`Failed to fetch product paths, status: ${res.status}`);
     }
-    const { data } = await res.json();
+    const  receivedData  = await res.json();
+    const data = receivedData?.data
+    // console.log(data);
+    
+
     const paths = data.map(product => ({
       params: { productId: product._id }
     }));
 
-    return { paths, fallback: 'blocking' };
+    return { paths, fallback: false };
   } catch (error) {
     console.error('getStaticPaths error:', error.message);
     return { paths: [], fallback: 'blocking' };
@@ -88,13 +92,18 @@ export const getStaticPaths = async () => {
 
 
 export const getStaticProps = async ({ params }) => {
+  // console.log(params.productId);
+  
   const apiUrl = process.env.API_URL || 'http://localhost:5000'; // Same fallback mechanism
+  
   try {
     const res = await fetch(`${apiUrl}/api/v1/products/${params.productId}`);
+    
     if (!res.ok) {
       throw new Error(`Failed to fetch product ${params.productId}, status: ${res.status}`);
     }
     const product = await res.json();
+    console.log(product);
 
     return { props: { product } };
   } catch (error) {

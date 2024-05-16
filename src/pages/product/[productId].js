@@ -67,7 +67,7 @@ export default productDetail;
 
 export const getStaticPaths = async () => {
   try {
-    const apiUrl = process.env.API_URL || 'http://localhost:5000';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
     const res = await fetch(`${apiUrl}/api/v1/products/?limit=40`);
     if (!res.ok) {
       console.error(`Failed to fetch product paths, status: ${res.status}, URL: ${apiUrl}`);
@@ -94,10 +94,10 @@ export const getStaticPaths = async () => {
 export const getStaticProps = async ({ params }) => {
   // console.log(params.productId);
   
-  const apiUrl = process.env.API_URL || 'http://localhost:5000'; // Same fallback mechanism
+  const baseURL = process.env.NEXT_PUBLIC_API_URL ; // Same fallback mechanism
   
   try {
-    const res = await fetch(`${apiUrl}/api/v1/products/${params.productId}`);
+    const res = await fetch(`${baseURL}/api/v1/products/${params.productId}`);
     
     if (!res.ok) {
       throw new Error(`Failed to fetch product ${params.productId}, status: ${res.status}`);

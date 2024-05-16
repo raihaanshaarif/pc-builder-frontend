@@ -55,8 +55,9 @@ const ProcessorPage = ({ processors }) => {
 export default ProcessorPage;
 
 export async function getStaticProps() {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
   try {
-      const res = await fetch('http://localhost:5000/api/v1/products/?category=processor');
+      const res = await fetch(`${baseURL}/api/v1/products/?category=processor`);
       const data = await res.json();
       
       if (!res.ok) {

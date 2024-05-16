@@ -56,8 +56,9 @@ const StorageDevicePage = ({ storageDevices }) => {
 export default StorageDevicePage;
 
 export const getStaticProps = async()=> {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL ;
   try {
-      const res = await fetch('http://localhost:5000/api/v1/products/?category=storage%20device');
+      const res = await fetch(`${baseURL}/api/v1/products/?category=storage%20device`);
       const data = await res.json();
       
       if (!res.ok) {

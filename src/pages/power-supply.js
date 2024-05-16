@@ -59,8 +59,9 @@ export default PowerSupplyPage;
 
 
 export async function getStaticProps() {
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
   try {
-      const res = await fetch('http://localhost:5000/api/v1/products/?category=power%20supply');
+      const res = await fetch(`${baseURL}/api/v1/products/?category=power%20supply`);
       const data = await res.json();
       
       if (!res.ok) {

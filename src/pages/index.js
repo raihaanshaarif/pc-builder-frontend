@@ -22,9 +22,10 @@ export default function Home({ featuredProducts }) {
 
 
 export const getStaticProps = async() =>{
-  const apiUrl = process.env.API_URL;
+  const baseURL = process.env.NEXT_PUBLIC_API_URL;
   try {
-    const res = await fetch(`${apiUrl}/api/v1/products/${params.productId}`);
+    const res = await fetch(`${baseURL}/api/v1/products?featured=true`);
+    console.log('this is rres', res);
     if (!res.ok) {
       throw new Error(`Failed to fetch products, status: ${res.status}`);
     }

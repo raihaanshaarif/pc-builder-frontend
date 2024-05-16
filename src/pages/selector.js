@@ -79,8 +79,9 @@ export const getServerSideProps = async (context) => {
   try {
     const { query } = context;
     const category = query?.category;
+    const baseURL = process.env.NEXT_PUBLIC_API_URL;
 
-    const res = await fetch(`http://localhost:5000/api/v1/products/?category=${category}`);
+    const res = await fetch(`${baseURL}/api/v1/products/?category=${category}`);
 
     if (!res.ok) {
       throw new Error(`Failed to fetch products, status: ${res.status}`);
